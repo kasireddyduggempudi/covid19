@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="description" content="Website to display coronoa updates using the india map">
+    <meta name="keywords" content="corona, covid, corona updates india, corona live updates india, covid19 updates">
+    <meta name="author" content="Kasi Reddy Duggempudi, Map taken from: simplemaps.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country Map Example</title>
+    
+
+  </head>
+  <body style="text-align: center;" >
+  <h1>HTML5/Javascript Country Map</h1>
+  
+    <div id="map" style="display: block;margin-left:auto;margin-right:auto">
+
+    </div>
+    <script src="static/mapdata.js"></script>
+    <script src="static/countrymap.js"></script>
+    <script>
+      var data = {{data|tojson}}   //this will gives the json object of data
+      simplemaps_countrymap.hooks.ready = function (){
+        // optionally update simplemaps_worldmap.mapdata
+        simplemaps_countrymap.load();
+
+        // changing description of every state
+        for(let stateId in simplemaps_countrymap_mapdata.state_specific){
+            let stats = data[simplemaps_countrymap_mapdata.state_specific[stateId].name];
+            if(stats){
+            //simplemaps_countrymap_mapdata.state_specific[stateId].description = "Confirmed: "+stats["confirmed"]+"<br />"+"Recovered: "+stats["recovered"]+"<br />"+"Deaths: "+stats["deaths"];
+            simplemaps_countrymap_mapdata.state_specific[stateId].description = "<font style='color:white'>Confirmed: "+stats["confirmed"]+"<br />Recovered: "+stats["recovered"]+"<br />Deaths: "+stats["deaths"]+"</font>";
+            }
+        }
+
+        simplemaps_countrymap.refresh();
+      }
+    </script>
+	</body>
+</html>
+      
+    
+
+
+
+<!-- bigrock-->
