@@ -1,16 +1,16 @@
 import flask
 from flask import render_template
 from flask import request, jsonify
-from flask_cors import CORS
+#from flask_cors import CORS
 
 #modules related to geeksforgeeks code
 # importing libraries 
 import requests 
 from bs4 import BeautifulSoup 
-from tabulate import tabulate 
+#from tabulate import tabulate 
 import os 
-import numpy as np 
-import matplotlib.pyplot as plt
+#import numpy as np 
+#import matplotlib.pyplot as plt
 
 URL = 'https://www.mohfw.gov.in/'   #url from where we get data
 def getAllStatesCovidData():
@@ -23,20 +23,22 @@ def getAllStatesCovidData():
     header = extract_contents(soup.tr.find_all('th')) 
 
     stats = [] #stores all lists where each list be like ['sno', 'statename', 'totalConfirmed-IndianNational', 'totalConfirmed-ForeignNational', 'cured', 'death']
-    all_rows = soup.find_all('tr') 
+    all_rows = soup.find_all('tr')
 
     for row in all_rows: 
-            stat = extract_contents(row.find_all('td')) 
-            if stat: 
-                    if len(stat) == 6: 
+            stat = extract_contents(row.find_all('td'))
+            
+            if stat:
+                    if len(stat) == 5: 
                             stats.append(stat)
+    print(stats)
 
     """code to convert strings data into int and then send total confirmed from indian and foreign nationals """
     data = {} #will store keys and values, where keys is state names and values is also object like {confirmed: 1, recovered:1, deaths:0}
     #print(stats)
     for row in stats:
         try:
-            val = {"confirmed":int(row[2]) + int(row[3]), "recovered": int(row[4]), "deaths": int(row[5])}
+            val = {"confirmed":int(row[2]) , "recovered": int(row[3]), "deaths": int(row[4])}
             data[row[1]] = val;
         except:
             continue
@@ -48,7 +50,7 @@ def getAllStatesCovidData():
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-CORS(app)
+#CORS(app)
 
 @app.route('/', methods=['GET'])
 def home():
@@ -58,7 +60,7 @@ def home():
 @app.route('/getAllStatesCovidData', methods=['GET'])
 def api_all():
     return jsonify(getAllStatesCovidData())
-
-app.run()
+if __name__ == "__main__":
+    app.run()
 
 
